@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Personal scratch work, never committed
+scratch/
+
+# Data
+data/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # FYS-STK3155/4155 Project 2: Feed-forward neural networks
 
 Group members: _add names_
@@ -48,3 +49,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Use of LLMs
 
 _Describe how AI tools were used, as required by the project text._
+=======
+# Project_2_FYS_STK_4155
+>>>>>>> dd8e4d994c9300f3de48982792184ab5b83133ec

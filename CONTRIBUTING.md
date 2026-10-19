@@ -25,6 +25,7 @@ Only the owner edits a file. Others suggest changes through an issue or a small 
 - `backprop` returns gradients in the same structure.
 - Optimizers: `step(params, grads)`.
 - Adding an optional argument is fine. Renaming or reordering arguments is not.
+- Cost functions and metrics take arguments in the order `(predict, target)`.
 
 ## Daily git workflow
 

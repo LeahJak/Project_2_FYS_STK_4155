@@ -26,3 +26,7 @@ def make_runge_split(n=100, sigma=0.1, test_size=0.2, seed=seed):
     X, y = make_runge(n, sigma, seed)
     return train_test_split(X, y, test_size=test_size, random_state=seed)
 
+def make_batches(n, batch_size, rng):
+    """Shuffle the indices and split them into minibatches."""
+    idx = rng.permutation(n)
+    return [idx[i:i + batch_size] for i in range(0, n, batch_size)]

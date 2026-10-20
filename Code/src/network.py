@@ -5,7 +5,7 @@
 # - Forward pass per layer: a @ W + b.
 # - backprop returns gradients in the same structure as the parameters.
 import numpy as np 
-
+from src.data import make_batches
 
 class NeuralNetwork:
     def __init__(
@@ -16,6 +16,7 @@ class NeuralNetwork:
         activation_ders,
         cost_fun,
         cost_der,
+        optimizer,
         seed = 2026):
 
         self.network_input_size = network_input_size
@@ -26,6 +27,7 @@ class NeuralNetwork:
         self.cost_der = cost_der
         self.rng = np.random.default_rng(seed)
         self.layers = self.create_layers(network_input_size, layer_output_sizes)
+        self.optimizer = optimizer
 
     def create_layers(self, network_input_size, layer_output_sizes):
         layers = [] 
@@ -81,12 +83,18 @@ class NeuralNetwork:
 
 
     def update_weights(self, layer_grads):
-        pass
+        self.layers = self.optimizer.update(self.layers, layer_grads) #each optimizer has(needs per now) its own update method 
 
-    # These last two methods are not needed in the project, but they can be nice to have!
-    # The first one has a layers parameter so that you can use jax.grad on it.
-    def jax_compliant_predict(self, layers, inputs):
-        pass
+    def train(self, inputs, targets, epochs, batch_size, rng):
+        n = len(inputs)
+        history = []        #saving the cost per epoch to evaluate the learning 
+        for epoch in range(epochs):
+            batches = make_batches(n, batch_size, rng)
 
-    def jax_gradient(self, inputs, targets):
-        pass
+            for batch in batches:
+                inputs_batch = inputs[batch]
+                targets_batch = targets[batch]
+                layer_grads = self.compute_gradient(inputs_batch, targets_batch)
+                self.update_weights(layer_grads)
+            history.append(self.cost(inputs, targets))
+        return history 

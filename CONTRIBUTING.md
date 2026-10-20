@@ -10,7 +10,7 @@ If you write a function in a notebook and someone else needs it, move it to `src
 | File | Content | Aim |
 |---|---|---|
 | `src/network.py` | `NeuralNetwork`: `create_layers`, `predict`, `cost`, `feed_forward_saver`, `compute_gradient`, `update_weights`, `train` | L1/L2 penalty in `compute_gradient` |
-| `src/optimizers.py` | - | `GD`, `SGD`, `RMSprop`, `Adam` |
+| `src/optimizers.py` | `GD`, `SGD`,`RMSprop`,|   `Adam` |
 | `src/functions.py` | `mse`, `mse_der`, `L1`, `L1_der`, `L2`, `L2_der`, `cross_entropy`, `softmax`, `softmax_cross_entropy_der`, `sigmoid`, `sigmoid_der`, `ReLU`, `ReLU_der`, `leaky_ReLU`, `leaky_ReLU_der`, `identity`, `identity_der` | `binary_cross_entropy`, `binary_cross_entropy_der` |
 | `src/plotting.py` | - | `heatmap`, `savefig` |
 | `src/data.py` | `runge`, `design_matrix`, `make_runge`, `make_runge_split`, `make_batches` | Scaling, MNIST loading |
@@ -25,7 +25,7 @@ If you write a function in a notebook and someone else needs it, move it to `src
 
 - Network parameters: list of `(W, b)`, `W` shape `(n_in, n_out)`, forward pass `a @ W + b`.
 - `backprop` returns gradients in the same structure.
-- Optimizers: `step(params, grads)`.
+- Optimizers: `update(layers, layer_grads)`.
 - Adding an optional argument is fine. Renaming or reordering arguments is not.
 - Cost functions and metrics take arguments in the order `(predict, target)`.
 

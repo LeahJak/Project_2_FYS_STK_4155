@@ -98,11 +98,3 @@ class NeuralNetwork:
                 self.update_weights(layer_grads)
             history.append(self.cost(inputs, targets))
         return history 
-
-    # These last two methods are not needed in the project, but they can be nice to have!
-    # The first one has a layers parameter so that you can use jax.grad on it.
-    def jax_compliant_predict(self, layers, inputs):
-        pass
-
-    def jax_gradient(self, inputs, targets):
-        pass

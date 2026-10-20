@@ -1,7 +1,92 @@
 # Feed-forward neural network with backpropagation.
-# Owner: Person 1
-#
+
 # Agreed interface (see CONTRIBUTING.md):
 # - Parameters are a list of (W, b), W has shape (n_inputs, n_outputs).
 # - Forward pass per layer: a @ W + b.
 # - backprop returns gradients in the same structure as the parameters.
+import numpy as np 
+
+
+class NeuralNetwork:
+    def __init__(
+        self,
+        network_input_size,
+        layer_output_sizes,
+        activation_funcs,
+        activation_ders,
+        cost_fun,
+        cost_der,
+        seed = 2026):
+
+        self.network_input_size = network_input_size
+        self.layer_output_sizes = layer_output_sizes
+        self.activation_funcs = activation_funcs
+        self.activation_ders = activation_ders
+        self.cost_fun = cost_fun
+        self.cost_der = cost_der
+        self.rng = np.random.default_rng(seed)
+        self.layers = self.create_layers(network_input_size, layer_output_sizes)
+
+    def create_layers(self, network_input_size, layer_output_sizes):
+        layers = [] 
+        i_size = network_input_size
+        for layer_output_size in layer_output_sizes:
+            W = self.rng.normal(0.0, 1.0 / np.sqrt(i_size), size=(i_size, layer_output_size))
+            b = np.zeros(layer_output_size)
+            layers.append((W, b))
+            i_size = layer_output_size
+        return layers
+
+    def predict(self, inputs):
+        a = inputs 
+        for (W, b), activation_func in zip(self.layers, self.activation_funcs):
+            z = a @ W + b
+            a = activation_func(z)
+        return a 
+
+    def cost(self, inputs, targets):
+        predict = self.predict(inputs)
+        return self.cost_fun(predict, targets)
+
+    def feed_forward_saver(self, inputs):
+        layer_inputs, zs , activations= [], [], []
+        a = inputs 
+        for (W, b), activation_func in zip(self.layers, self.activation_funcs):
+            layer_inputs.append(a)
+            z = a @ W + b
+            a = activation_func(z)
+            zs.append(z)
+            activations.append(a)
+
+        return layer_inputs, zs, activations
+
+    def compute_gradient(self, inputs, targets):
+        layer_inputs, zs, activations = self.feed_forward_saver(inputs)
+        layers = self.layers 
+        layer_grads = [() for layer in layers]
+        for i in reversed(range(len(layers))):
+            layer_input, z = layer_inputs[i], zs[i]
+            activation_der = self.activation_ders[i]
+            if i == len(layers) - 1:
+                dC_da = self.cost_der(activations[-1], targets) #feed_forward_saver returns the activations as a list, the final one is the output activation
+            else:
+                (W, b) = layers[i + 1]
+                dC_da = dC_dz @ W.T                          # (n, M_{l+1}) @ (M_{l+1}, M_l)
+                
+            dC_dz = dC_da * activation_der(z)                # (n, M_l)
+            dC_dW = layer_input.T @ dC_dz                    # (M_{l-1}, n) @ (n, M_l): summed over the samples
+            dC_db = np.sum(dC_dz, axis=0)                    # (M_l,)
+            layer_grads[i] = (dC_dW, dC_db)
+        return layer_grads
+
+
+    def update_weights(self, layer_grads):
+        pass
+
+    # These last two methods are not needed in the project, but they can be nice to have!
+    # The first one has a layers parameter so that you can use jax.grad on it.
+    def jax_compliant_predict(self, layers, inputs):
+        pass
+
+    def jax_gradient(self, inputs, targets):
+        pass

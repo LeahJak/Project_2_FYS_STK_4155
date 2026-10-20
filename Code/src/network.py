@@ -6,6 +6,7 @@
 # - backprop returns gradients in the same structure as the parameters.
 import numpy as np 
 from src.data import make_batches
+from src.functions import L1_der, L2_der 
 
 class NeuralNetwork:
     def __init__(
@@ -17,6 +18,8 @@ class NeuralNetwork:
         cost_fun,
         cost_der,
         optimizer,
+        regularization=None, 
+        lmbda = 0.0,
         seed = 2026):
 
         self.network_input_size = network_input_size
@@ -25,6 +28,8 @@ class NeuralNetwork:
         self.activation_ders = activation_ders
         self.cost_fun = cost_fun
         self.cost_der = cost_der
+        self.regularization = regularization 
+        self.lmbda = lmbda 
         self.rng = np.random.default_rng(seed)
         self.layers = self.create_layers(network_input_size, layer_output_sizes)
         self.optimizer = optimizer
@@ -77,8 +82,17 @@ class NeuralNetwork:
                 
             dC_dz = dC_da * activation_der(z)                # (n, M_l)
             dC_dW = layer_input.T @ dC_dz                    # (M_{l-1}, n) @ (n, M_l): summed over the samples
-            dC_db = np.sum(dC_dz, axis=0)                    # (M_l,)
-            layer_grads[i] = (dC_dW, dC_db)
+            dC_db = np.sum(dC_dz, axis=0)  
+
+            W, b = layers[i] 
+            if self.regularization == 'L1':  
+                dC_dW += self.lmbda * L1_der(W) 
+                dC_db += self.lmbda * L1_der(b)
+            elif self.regularization == 'L2' :
+                dC_dW +=  self.lmbda * L2_der(W)
+                dC_db += self.lmbda * L2_der(b)  
+                     
+            layer_grads[i] = (dC_dW, dC_db)                  # (M_l,)
         return layer_grads
 
 

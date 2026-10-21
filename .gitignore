@@ -12,7 +12,8 @@ venv/
 scratch/
 
 # Data
-data/
+data/*
+!data/.gitkeep
 
 # OS / editors
 .DS_Store

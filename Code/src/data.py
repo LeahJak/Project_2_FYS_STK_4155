@@ -34,11 +34,9 @@ def make_batches(n, batch_size, rng):
 def scale_data(X_train, X_test):
     """
     Standardize features using the training data.
-    Parameters
-    X_train : array-like
-        Training features.
-    X_test : array-like
-        Test features.
+    Parameters:
+    X_train : array-like. Training features.
+    X_test : array-like. Test features.
     """
     mean = np.mean(X_train, axis=0)
     std = np.std(X_train, axis=0)

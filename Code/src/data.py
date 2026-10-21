@@ -30,3 +30,19 @@ def make_batches(n, batch_size, rng):
     """Shuffle the indices and split them into minibatches."""
     idx = rng.permutation(n)
     return [idx[i:i + batch_size] for i in range(0, n, batch_size)]
+
+def scale_data(X_train, X_test):
+    """
+    Standardize features using the training data.
+    Parameters:
+    X_train : array-like. Training features.
+    X_test : array-like. Test features.
+    """
+    mean = np.mean(X_train, axis=0)
+    std = np.std(X_train, axis=0)
+    std = np.where(std == 0, 1.0, std)
+
+    X_train_scaled = (X_train - mean) / std
+    X_test_scaled = (X_test - mean) / std
+
+    return X_train_scaled, X_test_scaled, mean, std 

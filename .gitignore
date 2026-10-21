@@ -11,9 +11,6 @@ venv/
 # Personal scratch work, never committed
 scratch/
 
-# Data
-data/*
-!data/.gitkeep
 
 # OS / editors
 .DS_Store

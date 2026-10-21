@@ -3,9 +3,12 @@ jax.config.update("jax_enable_x64", True)
 import jax.numpy as jnp
 import numpy as np
 import pytest
+from sklearn.linear_model import LinearRegression 
 
 from src.network import NeuralNetwork
 from src.functions import *
+from src.optimizers import GD 
+
 
 class DummyOptimizer:
     def update(self, layers, layer_grads):
@@ -65,3 +68,31 @@ def test_gradient_matches_jax(case):
     for (mW, mb), (aW, ab) in zip(manual, auto):
         np.testing.assert_allclose(mW, aW, rtol=1e-6, atol=1e-10)
         np.testing.assert_allclose(mb, ab, rtol=1e-6, atol=1e-10)
+
+
+def test_network_on_ols():
+    # Test data for the ols check 
+    rng = np.random.default_rng(2026)
+    X = rng.uniform(-1, 1, (100, 1))
+    y = 2 * X + 3
+
+    ols = LinearRegression().fit(X, y) 
+    y_ols = ols.predict(X)
+
+    network = NeuralNetwork(
+        network_input_size=1,
+        layer_output_sizes=[1],
+        activation_funcs=[identity],
+        activation_ders=[identity_der],
+        cost_fun=mse,
+        cost_der=mse_der,
+        optimizer=GD(gamma=0.1),
+        seed=2026)
+    #full dataset per/batch ran once per epoch -> plain GD. 
+    network.train(X, y, epochs=2000, batch_size=len(X), rng=rng) 
+    y_network = network.predict(X) 
+
+    (W, b), = network.layers
+    np.testing.assert_allclose(W, ols.coef_.T, atol=1e-6)
+    np.testing.assert_allclose(b, ols.intercept_, atol=1e-6)
+    np.testing.assert_allclose(y_ols, y_network, atol=1e-6)

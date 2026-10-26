@@ -22,3 +22,7 @@ def per_class_from_confusion(C):
     precision = tp / np.maximum(C.sum(axis=0), 1)
     recall = tp / np.maximum(C.sum(axis=1), 1)
     return precision, recall
+
+def standard_error(p, n):
+    """Standard error of a proportion p (e.g. accuracy) measured on n samples, Eq. (2.24)."""
+    return np.sqrt(p * (1 - p) / n)

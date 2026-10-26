@@ -1,5 +1,7 @@
 # Cost functions, activation functions and their derivatives (part a).
 import jax.numpy as jnp  
+import jax
+jax.config.update("jax_enable_x64", True)
 
 def mse(predict, target):
     """Mean squared error between predictions and targets."""

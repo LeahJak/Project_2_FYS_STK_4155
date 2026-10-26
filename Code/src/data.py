@@ -62,3 +62,9 @@ def one_hot(y, n_classes=10):
     Y = np.zeros((len(y), n_classes))
     Y[np.arange(len(y)), y] = 1.0
     return Y
+
+def make_mnist_split(path="mnist.npz", val_size=10000, seed=seed):
+    """MNIST with a validation set split off from the training data. the test set is left untouched."""
+    x_train, y_train, x_test, y_test = load_mnist(path)
+    x_tr, x_val, y_tr, y_val = train_test_split(x_train, y_train, test_size=val_size, random_state=seed)
+    return x_tr, x_val, x_test, y_tr, y_val, y_test

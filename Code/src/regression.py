@@ -21,17 +21,13 @@ def ridge_fit(X, y, lmbda):
     U, s, Vt = np.linalg.svd(X, full_matrices=False)
     return Vt.T @ np.diag(s / (s**2 + n * lmbda)) @ U.T @ y
 
-
-def ols_fit(X, y):
-    """Closed-form OLS coefficients (project 1, part a)"""
-    "Solves min (1/n) ||y - X theta||^2 + lambda ||theta||^2"
-    return np.linalg.pinv(X) @ y
-
+'''
 def ridge_fit(X, y, lam):
     """Ridge coefficients via the SVD (project 1, part b)"""
     n = X.shape[0]
     U, s, Vt = np.linalg.svd(X, full_matrices=False) # Finding singular value decomposition, using numpy module
     return Vt.T @ (s / (s**2 + n * lam) * (U.T @ y)) # returning estimated Ridge coefficients/theta values
+'''
 
 
 def lasso_fit(X, y, lam, gamma = None, n_iter = 2000, tol = 1e10):

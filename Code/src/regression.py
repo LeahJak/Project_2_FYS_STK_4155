@@ -16,6 +16,7 @@ def ols_fit(X, y):
 
 def ridge_fit(X, y, lmbda):
     """Ridge coefficients via the SVD (project 1, part b).
-    Solves min ||y - X theta||^2 + lambda ||theta||^2 (no 1/n factor)."""
+    Solves min ||y - X theta||^2 + lambda ||theta||^2."""
+    n = X.shape[0]
     U, s, Vt = np.linalg.svd(X, full_matrices=False)
-    return Vt.T @ (s / (s**2 + lmbda) * (U.T @ y))
+    return Vt.T @ np.diag(s / (s**2 + n * lmbda) @ U.T @ y)

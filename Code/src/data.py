@@ -46,3 +46,19 @@ def scale_data(X_train, X_test):
     X_test_scaled = (X_test - mean) / std
 
     return X_train_scaled, X_test_scaled, mean, std 
+
+def load_mnist(path="mnist.npz"):
+    """Loading full MNIST data: images flattened to 784 values and scaled to [0, 1], labels as digits 0-9."""
+    with np.load(path) as data:
+        x_train, y_train = data["x_train"], data["y_train"]
+        x_test, y_test = data["x_test"], data["y_test"]
+    x_train = x_train.reshape(len(x_train), -1) / 255.0
+    x_test = x_test.reshape(len(x_test), -1) / 255.0
+    return x_train, y_train, x_test, y_test
+
+
+def one_hot(y, n_classes=10):
+    """Digits 0-9 (labels) -> one-hot rows, e.g. 3 -> [0,0,0,1,0,0,0,0,0,0]."""
+    Y = np.zeros((len(y), n_classes))
+    Y[np.arange(len(y)), y] = 1.0
+    return Y

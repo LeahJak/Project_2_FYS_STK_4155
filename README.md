@@ -15,7 +15,8 @@ Project2/
 │   │   ├── optimizers.py   GD, SGD, RMSprop, Adam
 │   │   ├── data.py         Runge data, MNIST loading
 │   │   ├── metrics.py      MSE, R2, accuracy, confusion matrix
-│   │   └── plotting.py     shared plot style and helpers
+│   │   ├── plotting.py     shared plot style and helpers
+│   │   └── regression.py   code snippets from project 1, OLS, Ridge, Lasso
 │   ├── notebooks/      One notebook per part / per person
 │   ├── tests/          pytest tests
 │   ├── pyproject.toml

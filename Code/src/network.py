@@ -66,7 +66,7 @@ class NeuralNetwork:
         c = self.cost_fun(predict, targets)
         return c + self.penalty() if include_penalty else c
 
-    def jax_compliant_predict(self, layers, inputs):
+    def jax_predict(self, layers, inputs):
         a = inputs
         for (W, b), activation_func in zip(layers, self.activation_funcs):
             a = activation_func(a @ W + b)

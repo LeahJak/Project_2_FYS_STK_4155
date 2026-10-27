@@ -20,7 +20,7 @@ class NeuralNetwork:
         optimizer,
         regularization=None, 
         lmbda = 0.0,
-        seed = 2026):
+        seed = 2026, penalize_bias = True):
 
         self.network_input_size = network_input_size
         self.layer_output_sizes = layer_output_sizes
@@ -33,6 +33,7 @@ class NeuralNetwork:
         self.rng = np.random.default_rng(seed)
         self.layers = self.create_layers(network_input_size, layer_output_sizes)
         self.optimizer = optimizer
+        self.penalize_bias = penalize_bias
 
     def create_layers(self, network_input_size, layer_output_sizes):
         layers = [] 
@@ -87,10 +88,12 @@ class NeuralNetwork:
             W, b = layers[i] 
             if self.regularization == 'L1':  
                 dC_dW += self.lmbda * L1_der(W) 
-                dC_db += self.lmbda * L1_der(b)
-            elif self.regularization == 'L2' :
+                if self.penalize_bias:
+                    dC_db += self.lmbda * L1_der(b)
+            elif self.regularization == 'L2' :        
                 dC_dW +=  self.lmbda * L2_der(W)
-                dC_db += self.lmbda * L2_der(b)  
+                if self.penalize_bias:
+                    dC_db += self.lmbda * L2_der(b)  
                      
             layer_grads[i] = (dC_dW, dC_db)                  # (M_l,)
         return layer_grads

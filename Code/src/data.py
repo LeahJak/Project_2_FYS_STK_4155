@@ -47,6 +47,15 @@ def scale_data(X_train, X_test):
 
     return X_train_scaled, X_test_scaled, mean, std 
 
+
+def center_data(y_train, y_test):
+    """Center targets using the training-target mean."""
+    mean = np.mean(y_train)
+    y_train_centered = y_train - mean
+    y_test_centered = y_test - mean
+    return y_train_centered, y_test_centered, mean
+
+
 def load_mnist(path="mnist.npz"):
     """Loading full MNIST data: images flattened to 784 values and scaled to [0, 1], labels as digits 0-9."""
     with np.load(path) as data:

@@ -2,6 +2,7 @@
 # Owner: Person 3
 
 import numpy as np
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 def accuracy(y_true, y_pred):
@@ -31,10 +32,10 @@ def mse(predict, target):
     """mean squared error: (1/n) * sum_i (y_i - y_tudl_i)^2"""
     predict = np.asarray(predict).ravel()
     target = np.asarray(target).ravel()
-    return np.mean((target - predict)**2)
+    return mean_squared_error(target, predict)
 
 def r2(predict, target):
     """R2 score: 1 - sum_i(y_i - y_tudl_i)^2 / sum_i(y_i - mean(y))^2"""
     predict = np.asarray(predict).ravel()
     target = np.asarray(target).ravel()
-    return 1 - np.sum((target - predict)**2) / np.sum((target - np.mean(target))**2)
+    return r2_score(target, predict)

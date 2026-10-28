@@ -23,8 +23,8 @@ def ridge_fit(X, y, lmbda):
 
     
 
-def lasso_fit(X, y, lam, gamma = None, n_iter = 20000, tol = 1e-10):
-    """Lasso coefficients with plain gradient descent
+def lasso_fit(X, y, lam, gamma = 0.001, n_iter = 20000, tol = 1e-10):
+    """Lasso coefficients with plain optimization
     Minimises (1/n)||y - X theta||^2 + lam ||theta||_1, using the subgradient lam*sign(theta)"""
 
     n, p  = X.shape

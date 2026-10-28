@@ -22,24 +22,21 @@ def ridge_fit(X, y, lmbda):
     return Vt.T @ np.diag(s / (s**2 + n * lmbda)) @ U.T @ y
 
     
-def lasso_fit(X, y, lam, gamma = None, n_iter = 2000, tol = 1e-10):
-    """Lasso coefficients with plain gradient descent
+
+def lasso_fit(X, y, lam, gamma = 0.001, n_iter = 20000, tol = 1e-10):
+    """Lasso coefficients with plain optimization
     Minimises (1/n)||y - X theta||^2 + lam ||theta||_1, using the subgradient lam*sign(theta)"""
 
-    n, p = X.shape
+    n, p  = X.shape
     y = np.asarray(y).reshape(n, -1)
-
-    if gamma is None:
-        gamma = n / (2 * np.linalg.norm(X, 2)**2)  
     theta = np.zeros((p, y.shape[1]))
 
     for _ in range(n_iter):
         grad = (2.0 / n) * X.T @ (X @ theta - y) + lam * np.sign(theta)
-        theta_new = theta - gamma * grad
+        theta_new = theta - gamma * grad # plain
         if np.max(np.abs(theta_new - theta)) < tol:
             theta = theta_new
             break
         theta = theta_new
     return theta
-
 

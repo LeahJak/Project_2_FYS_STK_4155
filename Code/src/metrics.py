@@ -2,6 +2,7 @@
 # Owner: Person 3
 
 import numpy as np
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 def accuracy(y_true, y_pred):
@@ -26,3 +27,15 @@ def per_class_from_confusion(C):
 def standard_error(p, n):
     """Standard error of a proportion p (e.g. accuracy) measured on n samples, Eq. (2.24)."""
     return np.sqrt(p * (1 - p) / n)
+
+def mse(predict, target):
+    """mean squared error: (1/n) * sum_i (y_i - y_tudl_i)^2"""
+    predict = np.asarray(predict).ravel()
+    target = np.asarray(target).ravel()
+    return mean_squared_error(target, predict)
+
+def r2(predict, target):
+    """R2 score: 1 - sum_i(y_i - y_tudl_i)^2 / sum_i(y_i - mean(y))^2"""
+    predict = np.asarray(predict).ravel()
+    target = np.asarray(target).ravel()
+    return r2_score(target, predict)

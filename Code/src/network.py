@@ -64,17 +64,7 @@ class NeuralNetwork:
     def cost(self, inputs, targets, include_penalty = False):
         predict = self.predict(inputs)
         c = self.cost_fun(predict, targets)
-        return c + self.penalty() if include_penalty else c
-
-    def jax_predict(self, layers, inputs):
-        a = inputs
-        for (W, b), activation_func in zip(layers, self.activation_funcs):
-            a = activation_func(a @ W + b)
-        return a
-
-    def jax_cost(self, layers, inputs, targets):
-        pred = self.jax_compliant_predict(layers, inputs)
-        return self.cost_fun(pred, targets) + self.penalty(layers)
+        return c + self.penalty(self.layers) if include_penalty else c
 
     def feed_forward_saver(self, inputs):
         layer_inputs, zs , activations= [], [], []

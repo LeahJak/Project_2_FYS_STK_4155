@@ -9,12 +9,12 @@ If you write a function in a notebook and someone else needs it, move it to `src
 
 | File | Content | Aim |
 |---|---|---|
-| `src/network.py` | `NeuralNetwork`: `create_layers`, `predict`, `penalty`, `cost`, ``jax_predict`, `jax_cost`, `feed_forward_saver`, `compute_gradient` w/L1/L2, `update_weights`, `train` | :) |
+| `src/network.py` | `NeuralNetwork`: `create_layers`, `predict`, `penalty`, `cost`, `feed_forward_saver`, `compute_gradient` w/L1/L2, `update_weights`, `train` | :) |
 | `src/optimizers.py` | `GD`, `SGD`,`RMSprop`,`Adam`|  :)  |
 | `src/functions.py` | `mse`, `mse_der`, `L1`, `L1_der`, `L2`, `L2_der`, `cross_entropy`, `softmax`, `softmax_cross_entropy_der`, `sigmoid`, `sigmoid_der`, `ReLU`, `ReLU_der`, `leaky_ReLU`, `leaky_ReLU_der`, `identity`, `identity_der` | `binary_cross_entropy`, `binary_cross_entropy_der` |
-| `src/plotting.py` | - | `heatmap`, `savefig` |
-| `src/data.py` | `runge`, `design_matrix`, `make_runge`, `make_runge_split`, `make_batches` | Scaling, MNIST loading |
-| `src/metrics.py` | - | `r2`, `accuracy`, `confusion_matrix` |
+| `src/plotting.py` | `save_fig`, `line_plot`, `heatmap` | - |
+| `src/data.py` | `runge`, `design_matrix`, `make_runge`, `make_runge_split`, `make_batches`, `scale_data`, `center_data`, `load_mnist`, `one_hot`, `make_mnist_split` | - |
+| `src/metrics.py` | `accuracy`, `confusion_matrix_multiclass`, `per_class_from_confusion`, `standard_error`, `r2` | `confusion_matrix` |
 | `notebooks/part_b_regression.ipynb` | - | NN vs OLS, learning rates |
 | `notebooks/part_c_activations.ipynb` | - | Activations, depth and width |
 | `notebooks/part_d_regularization.ipynb` | - | L1/L2 vs Ridge/Lasso |

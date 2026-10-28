@@ -47,6 +47,15 @@ def scale_data(X_train, X_test):
 
     return X_train_scaled, X_test_scaled, mean, std 
 
+
+def center_data(y_train, y_test):
+    """Center targets using the training-target mean."""
+    mean = np.mean(y_train)
+    y_train_centered = y_train - mean
+    y_test_centered = y_test - mean
+    return y_train_centered, y_test_centered, mean
+
+
 def load_mnist(path="mnist.npz"):
     """Loading full MNIST data: images flattened to 784 values and scaled to [0, 1], labels as digits 0-9."""
     with np.load(path) as data:
@@ -68,3 +77,9 @@ def make_mnist_split(path="mnist.npz", val_size=10000, seed=seed):
     x_train, y_train, x_test, y_test = load_mnist(path)
     x_tr, x_val, y_tr, y_val = train_test_split(x_train, y_train, test_size=val_size, random_state=seed)
     return x_tr, x_val, x_test, y_tr, y_val, y_test
+
+def make_runge_split_3(n=100, sigma=0.1, test_size=0.2, val_size=0.2, seed = seed):
+    """Runge data split into training, validation and test sets"""
+    x_train, x_test, y_train, y_test = make_runge_split(n, sigma, test_size, seed)
+    x_tr, x_val, y_tr, y_val = train_test_split(x_train, y_train, test_size=val_size, random_state=seed)
+    return x_tr, x_val, x_test, y_tr, y_val, y_test  

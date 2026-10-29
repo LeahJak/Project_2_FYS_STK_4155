@@ -23,12 +23,16 @@ def ridge_fit(X, y, lmbda):
 
     
 
-def lasso_fit(X, y, lam, gamma = 0.01, n_iter = 20000, tol = 1e-10, beta1=0.9, beta2=0.999, eps=1e-8):
+def lasso_fit(X, y, lam, gamma = None, n_iter = 5000000, tol = 1e-10, beta1=0.9, beta2=0.999, eps=1e-8):
     """Lasso coefficients with plain optimization
     Minimises (1/n)||y - X theta||^2 + lam ||theta||_1, using the subgradient lam*sign(theta)"""
 
     n, p  = X.shape
     y = np.asarray(y).reshape(n, -1)
+
+    if gamma is None:
+        gamma = n/ (2 * np.linalg.norm(X, 2)**2) # 1/lam_max of the MSE Hessian
+
     theta = np.zeros((p, y.shape[1]))
     m = np.zeros_like(theta) # moving average of grads
     r = np.zeros_like(theta) # moving average of squared grads

@@ -59,8 +59,9 @@ class NeuralNetwork:
         if self.regularization == 'L1':
             return self.lmbda * sum(L1(t) for t in terms)
         if self.regularization == 'L2':
-                return self.lmbda * sum(L2(t) for t in terms)
-        
+            return self.lmbda * sum(L2(t) for t in terms)
+        return 0.0
+    
     def cost(self, inputs, targets, include_penalty = False):
         predict = self.predict(inputs)
         c = self.cost_fun(predict, targets)

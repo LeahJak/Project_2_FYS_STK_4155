@@ -6,7 +6,7 @@
 # - backprop returns gradients in the same structure as the parameters.
 import numpy as np 
 from src.data import make_batches
-from src.functions import L1_der, L2_der 
+from src.functions import L1, L1_der, L2, L2_der 
 
 class NeuralNetwork:
     def __init__(
@@ -20,7 +20,8 @@ class NeuralNetwork:
         optimizer,
         regularization=None, 
         lmbda = 0.0,
-        seed = 2026):
+        seed = 2026,
+        penalize_bias=True):
 
         self.network_input_size = network_input_size
         self.layer_output_sizes = layer_output_sizes
@@ -33,6 +34,7 @@ class NeuralNetwork:
         self.rng = np.random.default_rng(seed)
         self.layers = self.create_layers(network_input_size, layer_output_sizes)
         self.optimizer = optimizer
+        self.penalize_bias = penalize_bias
 
     def create_layers(self, network_input_size, layer_output_sizes):
         layers = [] 
@@ -51,9 +53,19 @@ class NeuralNetwork:
             a = activation_func(z)
         return a 
 
-    def cost(self, inputs, targets):
+    def penalty(self, layers = None):
+        layers = self.layers if layers is None else layers
+        terms = [W for W, b in layers] + ([b for W, b in layers] if self.penalize_bias else [])
+        if self.regularization == 'L1':
+            return self.lmbda * sum(L1(t) for t in terms)
+        if self.regularization == 'L2':
+            return self.lmbda * sum(L2(t) for t in terms)
+        return 0.0
+    
+    def cost(self, inputs, targets, include_penalty = False):
         predict = self.predict(inputs)
-        return self.cost_fun(predict, targets)
+        c = self.cost_fun(predict, targets)
+        return c + self.penalty(self.layers) if include_penalty else c
 
     def feed_forward_saver(self, inputs):
         layer_inputs, zs , activations= [], [], []
@@ -87,10 +99,12 @@ class NeuralNetwork:
             W, b = layers[i] 
             if self.regularization == 'L1':  
                 dC_dW += self.lmbda * L1_der(W) 
-                dC_db += self.lmbda * L1_der(b)
-            elif self.regularization == 'L2' :
+                if self.penalize_bias:
+                    dC_db += self.lmbda * L1_der(b)
+            elif self.regularization == 'L2' :        
                 dC_dW +=  self.lmbda * L2_der(W)
-                dC_db += self.lmbda * L2_der(b)  
+                if self.penalize_bias:
+                    dC_db += self.lmbda * L2_der(b)  
                      
             layer_grads[i] = (dC_dW, dC_db)                  # (M_l,)
         return layer_grads

@@ -66,14 +66,30 @@ def load_mnist(path="mnist.npz"):
     return x_train, y_train, x_test, y_test
 
 
-def one_hot(y, n_classes=10):
-    """Digits 0-9 (labels) -> one-hot rows, e.g. 3 -> [0,0,0,1,0,0,0,0,0,0]."""
+def one_hot(y, n_classes=None):
+    """Integer labels (digits 0-9) -> one-hot rows (f.ex. 3 -> [0,0,0,1,0,0,0,0,0,0])."""
+    n_classes = int(np.max(y)) + 1 if n_classes is None else n_classes
     Y = np.zeros((len(y), n_classes))
     Y[np.arange(len(y)), y] = 1.0
     return Y
 
-def make_mnist_split(path="mnist.npz", val_size=10000, seed=seed):
-    """MNIST with a validation set split off from the training data. the test set is left untouched."""
-    x_train, y_train, x_test, y_test = load_mnist(path)
+def stratified_kfold_indices(y, k, rng):
+    """As kfold_indices, but each class is cut into k parts separately, so every fold has the class proportions of y."""
+    y = np.asarray(y)
+    val_parts = [[] for _ in range(k)]
+    for c in np.unique(y):
+        idx = rng.permutation(np.where(y == c)[0])
+        for i, part in enumerate(np.array_split(idx, k)):
+            val_parts[i].append(part)
+    folds = []
+    for i in range(k):
+        val = np.concatenate(val_parts[i])
+        train = np.setdiff1d(np.arange(len(y)), val)
+        folds.append((train, val))
+    return folds
+
+def make_runge_split_3(n=100, sigma=0.1, test_size=0.2, val_size=0.2, seed = seed):
+    """Runge data split into training, validation and test sets"""
+    x_train, x_test, y_train, y_test = make_runge_split(n, sigma, test_size, seed)
     x_tr, x_val, y_tr, y_val = train_test_split(x_train, y_train, test_size=val_size, random_state=seed)
-    return x_tr, x_val, x_test, y_tr, y_val, y_test
+    return x_tr, x_val, x_test, y_tr, y_val, y_test  

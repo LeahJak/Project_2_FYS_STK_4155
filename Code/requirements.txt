@@ -8,3 +8,4 @@ pandas
 nbstripout
 nbdime
 jax 
+torch

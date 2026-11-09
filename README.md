@@ -31,11 +31,17 @@ Project2/
 Open each notebook in `Code/notebooks/` and run **Kernel → Restart & Run All**.
 Figures are saved to `figures/`.
 
-## Install the required packages 
+## Installation
 
-```bash 
+The project uses Python and the dependencies listed in `requirements.txt`. To install them, first create and activate a virtual environment, then install the requirements:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+This installs the required packages in the virtual environment. Make sure the environment is activated whenever you run the project.
 
 ## Running tests
 
